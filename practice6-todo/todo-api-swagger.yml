@@ -1,0 +1,179 @@
+openapi: 3.0.0
+info:
+  title: Todo list
+  description: An example of CRUD(I) operations on a To-do list.
+  version: 1.0.11
+servers:
+  - url: http://localhost:8888/todo
+paths:
+  /todo:
+    get:
+      tags:
+        - todo
+      summary: List all todo items.
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              example:
+                [
+                  {
+                      "description": "Walk the dog",
+                      "done": false,
+                      "due": "2025-10-22",
+                      "id": "64272f3d16b2df1faf837ec9"
+                  },
+                  {
+                      "description": "Wash car",
+                      "done": false,
+                      "due": "2025-10-30",
+                      "id": "64272f4b16b2df1faf837eca"
+                  },
+                  ...
+                ]
+    post:
+      tags:
+        - todo
+      summary: Create a todo item
+      description: ''
+      operationId: ''
+      requestBody:
+        required: true
+        description: The todo item content.
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              {
+                "description": "Finish homework",
+                "done": false,
+                "due": "2025-10-23"
+              }
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                created:
+                  value:
+                    {
+                      "description": "Finish homework",
+                      "done": false,
+                      "due": "2025-10-23",
+                      "id": "64332264ba800f3139b4a564"
+                    }
+  /todo/{id}:
+    get:
+      tags:
+        - todo
+      summary: Get a todo item
+      parameters:
+        - name: id
+          in: path
+          description: ID of the todo item
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with the contents of the new resource.
+          content:
+            application/json:
+              example:
+                {
+                    "description": "Walk the dog",
+                    "done": false,
+                    "due": "2025-10-23",
+                    "id": "64272f3d16b2df1faf837ec9"
+                }
+        '404':
+          description: The ID is not found.
+    put:
+      tags:
+        - todo
+      summary: Replace a todo item
+      parameters:
+        - name: id
+          in: path
+          description: ID of the todo item to replace
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: The todo item content.
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              {
+                "description": "Finish homework",
+                "done": false,
+                "due": "2025-10-23"
+              }
+      responses:
+        '200':
+          description: Successful response with content of updated object.
+          content:
+            application/json:
+              examples:
+                updated:
+                  value:
+                    {
+                      "description": "Finish homework",
+                      "done": false,
+                      "due": "2025-10-22",
+                      "id": "64332264ba800f3139b4a564"
+                    }
+        '404':
+          description: The ID is not found.
+    delete:
+      tags:
+        - todo
+      summary: Delete a todo item
+      parameters:
+        - name: id
+          in: path
+          description: ID of the todo item to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Object was deleted.
+        '404':
+          description: The ID is not found.
+  /todo/{id}/done:
+    patch:
+      tags:
+        - todo
+      summary: Set the "done" attribute of a todo item
+      parameters:
+        - name: id
+          in: path
+          description: ID of the todo item to change
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: The value of the done attribute.
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              {
+                "done": true,
+              }
+      responses:
+        '204':
+          description: Object was updated.
+        '404':
+          description: The ID is not found.
